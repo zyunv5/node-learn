@@ -1,0 +1,4 @@
+// 客户端 resolver connector DB
+type Query {
+  hellos: [Hello!]
+}

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+  <link href="https://cdn.bootcss.com/minireset.css/0.0.2/minireset.min.css" rel="stylesheet">
+  <link href="assets/style.css" rel="stylesheet">
+</head>
+
+<body>
+  <header>
+    <form action="/todo">
+      <input type="text" placeholder="请输入">
+      <button type="submit" id="add">+</button>
+    </form>
+  </header>
+  <div class="container">
+    <!-- 未完成 -->
+    <ul class="todo" id="todo">
+      <% todos.forEach(function(todo){%>
+      <li>
+        <%= todo.item%>
+        <div class="buttons">
+          <button class="remove"></button>
+          <button class="complete"></button>
+        </div>
+      </li>
+      <%})%>
+    </ul>
+    <!-- 已完成 -->
+    <ul class="todo" id="completed">
+      <li>
+        nice兄弟
+        <div class="buttons">
+          <button class="remove">X</button>
+          <button class="complete">✔️</button>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+</body>
+<script>
+  $(document).ready(function () {
+    $("header").on("submit", function () {
+      var item = $("form input");
+      var todo = {
+        item: item.val()
+      };
+
+      if (todo.item == "") {
+        alert("内容不能为空");
+        return;
+      };
+      //发送数据请求
+      $.ajax({
+        type: "POST",
+        url: "/todo",
+        data: todo,
+        success: function () {
+
+        }
+      })
+    })
+    //删除数据请求
+    $(".remove").on("click", function(){
+      var item = $.trim($(this).parent().parent().text());
+      console.log(item)
+      $.ajax({
+        type: "DELETE",
+        url: "/todo/" + item,
+        success: (data) => {
+          location.reload();
+        }
+      })
+    })
+  })
+</script>
+
+</html>
